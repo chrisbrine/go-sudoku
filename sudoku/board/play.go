@@ -4,7 +4,7 @@ package board
 
 func (b *Board) SetHint(row, col, num int) bool {
 	if (b.ValidMove(row, col, num)) {
-		b.hints[row][col][num-1] = true
+		b.Hints[row][col][num-1] = true
 		return true
 	}
 
@@ -14,25 +14,25 @@ func (b *Board) SetHint(row, col, num int) bool {
 /* Will allow removing hints */
 
 func (b *Board) RemoveHint(row, col, num int) {
-	b.hints[row][col][num-1] = false
+	b.Hints[row][col][num-1] = false
 }
 
 /* Will check if a hint is set */
 
 func (b *Board) HasHint(row, col, num int) bool {
-	return b.hints[row][col][num-1]
+	return b.Hints[row][col][num-1]
 }
 
 /* Will set a move on the player board, removing the needed hints when doing so if the move is valid */
 
 func (b *Board) SetMove(row, col, num int) bool {
 	if (b.ValidMove(row, col, num)) {
-		b.playerBoard[row][col] = num
+		b.PlayerBoard[row][col] = num
 		b.RemoveHints(row, col, num)
 		return true
 	}
 
-	b.mistakes++
+	b.Mistakes++
 	return false
 }
 
@@ -40,15 +40,15 @@ func (b *Board) SetMove(row, col, num int) bool {
 
 func (b *Board) RemoveHints(row, col, num int) {
 	for i := 0; i < 9; i++ {
-		b.hints[row][i][num-1] = false
-		b.hints[i][col][num-1] = false
+		b.Hints[row][i][num-1] = false
+		b.Hints[i][col][num-1] = false
 	}
 
 	startRow := row - row%3
 	startCol := col - col%3
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
-			b.hints[i+startRow][j+startCol][num-1] = false
+			b.Hints[i+startRow][j+startCol][num-1] = false
 		}
 	}
 }
@@ -56,7 +56,7 @@ func (b *Board) RemoveHints(row, col, num int) {
 func (b *Board) BoardDone() bool {
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
-			if b.playerBoard[i][j] == b.board[i][j] {
+			if b.PlayerBoard[i][j] == b.Board[i][j] {
 				return false
 			}
 		}
@@ -66,6 +66,6 @@ func (b *Board) BoardDone() bool {
 }
 
 func (b *Board) GetMistakes() int {
-	return b.mistakes
+	return b.Mistakes
 }
 

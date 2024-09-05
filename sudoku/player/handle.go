@@ -1,7 +1,7 @@
 package player
 
 import (
-	sudokuBoard "../board"
+	"github.com/chrisbrine/go-sudoku/sudoku/board"
 	"github.com/google/uuid"
 )
 
@@ -10,72 +10,72 @@ func (p *Player) SetDifficulty(difficulty int) {
 	if difficulty < 1 || difficulty > 3 {
 		difficulty = 1
 	} else {
-		p.difficulty = difficulty
+		p.Difficulty = difficulty
 	}
 }
 
-func (p *Player) SetGame(board *sudokuBoard.Board) {
-	p.board = board
+func (p *Player) SetGame(board *board.Board) {
+	p.Board = board
 }
 
-func (p *Player) GetGame() *sudokuBoard.Board {
-	return p.board
+func (p *Player) GetGame() *board.Board {
+	return p.Board
 }
 
 func (p *Player) GetDifficulty() int {
-	return p.difficulty
+	return p.Difficulty
 }
 
 func (p *Player) GetWins() int {
-	return p.wins
+	return p.Wins
 }
 
 func (p *Player) GetLosses() int {
-	return p.losses
+	return p.Losses
 }
 
 func (p *Player) GetPerfectWins() int {
-	return p.perfectWins
+	return p.PerfectWins
 }
 
 func (p *Player) GetPoints() int {
-	return p.points
+	return p.Points
 }
 
 func (p *Player) AddWin() {
-	p.wins++
+	p.Wins++
 }
 
 func (p *Player) AddLoss() {
-	p.losses++
+	p.Losses++
 }
 
 func (p *Player) AddPerfectWin() {
-	p.perfectWins++
+	p.PerfectWins++
 }
 
 func (p *Player) AddPoints(points int) {
-	p.points += points
+	p.Points += points
 }
 
 func (p *Player) SetupPlayer() {
-	p.wins = 0
-	p.losses = 0
-	p.points = 0
+	p.Wins = 0
+	p.Losses = 0
+	p.Points = 0
 	p.SetDifficulty(1)
 }
 
 func (p *Player) SetID(id string) {
 	// if no string passed, generate id instead
 	if id == "" {
-		p.id = GenerateID()
+		p.Id = GenerateID()
 	} else {
-		p.id = id
+		p.Id = id
 	}
 }
 
 func (p *Player) GetID() string {
-	return p.id
+	return p.Id
 }
 
 /* handle random ID generation, produce as UUID */

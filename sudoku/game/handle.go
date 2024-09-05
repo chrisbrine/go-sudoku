@@ -32,10 +32,14 @@ func (g *Game) RandomKey() string {
 }
 
 func (g *Game) SetPlayer(p *player.Player) {
-	g.player = p
+	g.player = *p
 }
 
-func (g *Games) AddGame(p *player.Player) {
+func (g *Game) GetPlayer() *player.Player {
+	return &g.player
+}
+
+func (g *Games) AddPlayer(p *player.Player) {
 	// Create a new game for the player
 	game := &Game{}
 	game.SetPlayer(p)

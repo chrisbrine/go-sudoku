@@ -18,12 +18,12 @@ func (b *Board) removeNumbers(numberToRemove int) {
 		col := rand.Intn(9)
 
 		// Check if the cell is already empty
-		if b.playerBoard[row][col] == 0 {
+		if b.PlayerBoard[row][col] == 0 {
 			continue
 		}
 
 		// Remove the number
-		b.playerBoard[row][col] = 0
+		b.PlayerBoard[row][col] = 0
 		numberToRemove--
 	}
 }
@@ -38,7 +38,7 @@ func (b *Board) SetupBoard(difficulty int) {
 	// Set the player board to the board
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
-			b.playerBoard[i][j] = b.board[i][j]
+			b.PlayerBoard[i][j] = b.Board[i][j]
 		}
 	}
 
@@ -79,7 +79,7 @@ func (b *Board) InitBoard() {
 	// Go through each cell in the board and fill it with a random valid number
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
-			b.board[i][j] = b.randomizeNumber(i, j)
+			b.Board[i][j] = b.randomizeNumber(i, j)
 		}
 	}
 }
@@ -88,7 +88,7 @@ func (b *Board) EmptyHints() {
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
 			for k := 0; k < 9; k++ {
-				b.hints[i][j][k] = false
+				b.Hints[i][j][k] = false
 			}
 		}
 	}

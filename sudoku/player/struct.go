@@ -1,13 +1,13 @@
 package player
 
-import sudokuBoard "../board"
+import "github.com/chrisbrine/go-sudoku/sudoku/board"
 
 type Player struct {
-	id string
-	board *sudokuBoard.Board
-	perfectWins int
-	wins int
-	losses int
-	points int
-	difficulty int
+	Id string `json:"id"`
+	Board *board.Board `json:"board"`
+	PerfectWins int `json:"perfectWins"`
+	Wins int `json:"wins"`
+	Losses int `json:"losses"`
+	Points int `json:"points"`
+	Difficulty int `json:"difficulty"`
 }

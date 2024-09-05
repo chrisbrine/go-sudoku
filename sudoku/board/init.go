@@ -12,3 +12,7 @@ func Create(difficulty int) *Board {
 
 	return board
 }
+
+func CreateFromJson(data string) *Board {
+	return fromJson(data)
+}

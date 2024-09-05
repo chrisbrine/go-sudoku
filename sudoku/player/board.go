@@ -1,22 +1,22 @@
 package player
 
-import "../board"
+import "github.com/chrisbrine/go-sudoku/sudoku/board"
 
 func (p *Player) NewBoard() {
-	p.board = board.Create(p.difficulty)
+	p.Board = board.Create(p.Difficulty)
 }
 
 func (p *Player) FinishBoard() {
-	if p.board.BoardDone() {
+	if p.Board.BoardDone() {
 		p.AddWin()
-		mistakes := p.board.GetMistakes()
+		mistakes := p.Board.GetMistakes()
 		if mistakes == 0 {
 			p.AddPerfectWin()
 		}
-		points := (100 - (mistakes * 5)) * p.difficulty
+		points := (100 - (mistakes * 5)) * p.Difficulty
 		p.AddPoints(points)
 	} else {
 		p.AddLoss()
 	}
-	p.board = nil
+	p.Board = nil
 }

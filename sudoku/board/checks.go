@@ -7,7 +7,7 @@ func (b *Board) InBox(row, col, num int) bool {
 	startCol := col - col%3
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
-			if b.board[i+startRow][j+startCol] == num {
+			if b.Board[i+startRow][j+startCol] == num {
 				return true
 			}
 		}
@@ -19,7 +19,7 @@ func (b *Board) InBox(row, col, num int) bool {
 
 func (b *Board) InRow(row, num int) bool {
 	for i := 0; i < 8; i++ {
-		if i != row && b.board[row][i] == num {
+		if i != row && b.Board[row][i] == num {
 			return true
 		}
 	}
@@ -30,7 +30,7 @@ func (b *Board) InRow(row, num int) bool {
 
 func (b *Board) InCol(col, num int) bool {
 	for i := 0; i < 8; i++ {
-		if i != col && b.board[i][col] == num {
+		if i != col && b.Board[i][col] == num {
 			return true
 		}
 	}

@@ -1,6 +1,6 @@
 package game
 
-import "player"
+import "github.com/chrisbrine/go-sudoku/sudoku/player"
 
 type Game struct {
 	key string
