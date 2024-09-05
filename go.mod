@@ -1,12 +1,10 @@
 module github.com/chrisbrine/go-sudoku
 
-go 1.22.1
-
-require github.com/google/uuid v1.6.0
+go 1.22
 
 require (
-	github.com/mattn/go-sqlite3 v1.14.23 // indirect
-	golang.org/x/crypto v0.26.0 // indirect
+	github.com/google/uuid v1.6.0
+	golang.org/x/crypto v0.26.0
 )
 
 // replace github.com/chrisbrine/go-sudoku => /Users/strbjun/GoProjects/go-sudoku
