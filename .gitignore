@@ -1,3 +1,4 @@
 .vscode
+/.vscode
 sudoku.db
 *.db
