@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/chrisbrine/go-sudoku/sudoku"
 )
 
 func main() {
@@ -23,5 +25,5 @@ func main() {
 			path += " " + os.Args[i]
 		}
 	}
-	Sudoku(port, path)
+	sudoku.Run(port, path)
 }
