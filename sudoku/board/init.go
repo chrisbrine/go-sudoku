@@ -13,6 +13,6 @@ func Create(difficulty int) *Board {
 	return board
 }
 
-func CreateFromJson(data string) *Board {
+func CreateFromJson(data string) (*Board, error) {
 	return fromJson(data)
 }

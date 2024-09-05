@@ -4,14 +4,14 @@ import (
 	"database/sql"
 )
 
-type DB struct {
+type DBData struct {
 	db *sql.DB
 }
 
-type DBGame struct {
-	playerID string
-	data string
-}
+// type DBGame struct {
+// 	playerID string
+// 	data string
+// }
 
 type DBPlayer struct {
 	id string
@@ -23,4 +23,5 @@ type DBPlayer struct {
 	losses int
 	points int
 	difficulty int
+	token string
 }

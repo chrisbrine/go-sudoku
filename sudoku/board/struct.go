@@ -11,13 +11,19 @@ type Board struct {
 	Mistakes int `json:"Mistakes"`
 }
 
-func (b *Board) toJson() string {
-	data, _ := json.Marshal(b)
-	return string(data)
+func (b *Board) ToJson() (string, error) {
+	data, err := json.Marshal(b)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
-func fromJson(data string) *Board {
+func fromJson(data string) (*Board, error) {
 	board := Board{}
-	json.Unmarshal([]byte(data), &board)
-	return &board
+	err := json.Unmarshal([]byte(data), &board)
+	if err != nil {
+		return nil, err
+	}
+	return &board, nil
 }

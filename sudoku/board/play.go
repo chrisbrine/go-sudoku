@@ -3,6 +3,9 @@ package board
 /* Will allow setting hints */
 
 func (b *Board) SetHint(row, col, num int) bool {
+	if num < 1 || num > 9 {
+		return false
+	}
 	if (b.ValidMove(row, col, num)) {
 		b.Hints[row][col][num-1] = true
 		return true
@@ -14,6 +17,9 @@ func (b *Board) SetHint(row, col, num int) bool {
 /* Will allow removing hints */
 
 func (b *Board) RemoveHint(row, col, num int) {
+	if num < 1 || num > 9 {
+		return
+	}
 	b.Hints[row][col][num-1] = false
 }
 
@@ -67,5 +73,12 @@ func (b *Board) BoardDone() bool {
 
 func (b *Board) GetMistakes() int {
 	return b.Mistakes
+}
+
+func (b *Board) QuitGame() {
+	b.EmptyHints()
+	b.Mistakes = 0
+	b.PlayerBoard = [9][9]int{}
+	b.Board = [9][9]int{}
 }
 
