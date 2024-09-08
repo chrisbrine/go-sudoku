@@ -35,14 +35,24 @@ export const setHintRemove = createAsyncThunk(
   }
 );
 
-export const quitGame = createAsyncThunk("game/quitGame", async () => {
-  return API.quit();
-});
+export const quitGame = createAsyncThunk(
+  "game/quitGame",
+  async (_, { dispatch }) => {
+    const gameData = await API.quit();
+    dispatch(updateLeaderboard());
+    return gameData;
+  }
+);
 
 export const doLogin = createAsyncThunk(
   "game/login",
-  async ({ username, password }: { username: string; password: string }) => {
-    return API.login(username, password);
+  async (
+    { username, password }: { username: string; password: string },
+    { dispatch }
+  ) => {
+    const gameData = await API.login(username, password);
+    dispatch(updateLeaderboard());
+    return gameData;
   }
 );
 

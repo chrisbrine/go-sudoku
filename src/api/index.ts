@@ -163,7 +163,7 @@ export class API {
       username,
     });
 
-    API.username = username;
+    this.setUsername(username);
     return API.get();
   }
 

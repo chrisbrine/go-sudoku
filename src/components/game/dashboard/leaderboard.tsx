@@ -18,8 +18,6 @@ export function Item({ className, value }: IItemProps) {
 export default function Leaderboard() {
   const leaderboard = useAppSelector(getLeaderboard);
 
-  console.log(leaderboard);
-
   return leaderboard.length > 0 ? (
     <div className="leaderboard">
       <h2>Leaderboard</h2>

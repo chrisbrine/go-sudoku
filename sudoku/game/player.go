@@ -1,8 +1,6 @@
 package game
 
 import (
-	"fmt"
-
 	"github.com/chrisbrine/go-sudoku/sudoku/player"
 	"github.com/chrisbrine/go-sudoku/sudoku/sql"
 )
@@ -149,14 +147,12 @@ func QuitGame(db *sql.DBData, token string) (string, error) {
 	// get player data
 	playerData, playerInfo, playerErr := GetData(db, token)
 	if playerErr != nil {
-		fmt.Println("1. Error quitting game: ", playerErr)
 		return "", playerErr
 	}
 
 	// get board
 	board, boardErr := GetBoard(db, playerInfo)
 	if boardErr != nil {
-		fmt.Println("2. Error quitting game: ", boardErr)
 		return "", boardErr
 	}
 
@@ -167,7 +163,6 @@ func QuitGame(db *sql.DBData, token string) (string, error) {
 	playerData.Points = playerInfo.Points
 	dbPlayErr := db.UpdatePlayer(&playerInfo)
 	if dbPlayErr != nil {
-		fmt.Println("3. Error quitting game: ", dbPlayErr)
 		return "", dbPlayErr
 	}
 
@@ -176,7 +171,6 @@ func QuitGame(db *sql.DBData, token string) (string, error) {
 	// delete board from database
 	dbErr := db.DeleteGame(playerInfo.Id)
 	if dbErr != nil {
-		fmt.Println("4. Error quitting game: ", dbErr)
 		return "", dbErr
 	}
 

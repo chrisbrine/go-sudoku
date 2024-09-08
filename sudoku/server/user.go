@@ -58,7 +58,13 @@ func UserLogout(db *sql.DBData, w http.ResponseWriter, r *http.Request, params m
 
 func UserUpdateUsername(db *sql.DBData, w http.ResponseWriter, r *http.Request, params map[string]string) {
 	token := GetToken(r)
-	newUsername := GetOneFromBody(r, "newUsername")
+	newUsername := GetOneFromBody(r, "username")
+
+	if (newUsername == "") {
+		fmt.Println("Username cannot be empty")
+		RespondSuccess(w, false)
+		return
+	}
 
 	success, err := game.ChangeUserName(db, token, newUsername)
 	if err != nil {
@@ -75,9 +81,15 @@ func UserUpdatePassword(db *sql.DBData, w http.ResponseWriter, r *http.Request, 
 	oldPassword := data["oldPassword"]
 	newPassword := data["newPassword"]
 
+	if (newPassword == "" || oldPassword == "") {
+		fmt.Println("Password cannot be empty")
+		RespondSuccess(w, false)
+		return
+	}
+
 	success, err := game.ChangePassword(db, token, oldPassword, newPassword)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		RespondSuccess(w, false)
 		return
 	}
 
@@ -86,7 +98,13 @@ func UserUpdatePassword(db *sql.DBData, w http.ResponseWriter, r *http.Request, 
 
 func UserUpdateName(db *sql.DBData, w http.ResponseWriter, r *http.Request, params map[string]string) {
 	token := GetToken(r)
-	newName := GetOneFromBody(r, "newName")
+	newName := GetOneFromBody(r, "name")
+
+	if (newName == "") {
+		fmt.Println("Name cannot be empty")
+		RespondSuccess(w, false)
+		return
+	}
 
 	success, err := game.ChangeName(db, token, newName)
 	if err != nil {

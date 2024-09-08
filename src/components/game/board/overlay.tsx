@@ -16,7 +16,6 @@ export default function OverlayGameStatus() {
   const gameStatus = useAppSelector(getGameStatus);
   const mistakes = useAppSelector(getMistakes);
   const message = gameStatus === EGameStatus.WON ? "You won!" : "You lost!";
-  console.log(playing);
 
   return (
     <div

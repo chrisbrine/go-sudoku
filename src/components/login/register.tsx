@@ -24,7 +24,7 @@ export default function Register() {
       repeatPassword.length > 0 &&
       name.length > 0 &&
       password === repeatPassword &&
-      password.length >= 6;
+      password.length >= 4;
     return validity;
   };
 
