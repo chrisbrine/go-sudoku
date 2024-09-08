@@ -1,5 +1,6 @@
 import {
   GameData,
+  ILeaderboard,
   ILogin,
   IRegister,
   IRowColNum,
@@ -188,13 +189,14 @@ export class API {
 
   public static async updateDifficulty(difficulty: number): Promise<GameData> {
     await API.handle<void, IUpdateDifficulty>(
-      "POST",
-      "/api/update/difficulty",
-      {
-        difficulty,
-      }
+      "GET",
+      `/api/update/difficulty/${difficulty}`
     );
 
     return API.get();
+  }
+
+  public static async leaderboard(): Promise<ILeaderboard> {
+    return API.handle<ILeaderboard>("GET", "/api/game/leaderboard");
   }
 }

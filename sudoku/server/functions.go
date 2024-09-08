@@ -55,8 +55,6 @@ func GetFromBody(r *http.Request, key []string) map[string]string {
 		return nil
 	}
 
-	fmt.Println("Data from body", data)
-
 	// only get items in key
 	outputData := make(map[string]string)
 	for _, k := range key {

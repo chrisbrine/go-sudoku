@@ -7,14 +7,24 @@ export enum EPage {
   LEADERBOARD = "leaderboard",
 }
 
-export interface IData {
-  data: GameData;
-  page: EPage;
-  moves: number;
-  pickHint: boolean;
-  board: number[][];
-  hints: boolean[][][];
-  numbersLeft: number[];
+export enum EGameStatus {
+  LOSE = -1,
+  IN_PROGRESS = 0,
+  WON = 1,
+}
+
+export enum ELastMoveType {
+  NONE = "UNKNOWN",
+  MOVE = "MOVE",
+  HINT = "HINT",
+  HINT_REMOVE = "HINT_REMOVE",
+}
+
+export interface ILastMove {
+  Row: number;
+  Col: number;
+  Num: number;
+  Type: ELastMoveType;
 }
 
 export interface GameData {
@@ -24,6 +34,8 @@ export interface GameData {
   Mistakes: number;
   InGame: boolean;
   Playing: boolean;
+  GameStatus: EGameStatus;
+  LastMove: ILastMove;
   Username: string;
   Name: string;
   Wins: number;
@@ -74,3 +86,14 @@ export interface IRowCol {
 export interface IRowColNum extends IRowCol {
   num: number;
 }
+
+export interface ILeader {
+  Username: string;
+  Name: string;
+  Wins: number;
+  Losses: number;
+  Points: number;
+  PerfectWins: number;
+}
+
+export type ILeaderboard = ILeader[];

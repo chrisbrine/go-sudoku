@@ -1,14 +1,16 @@
 package board
 
-import "fmt"
-
 /* Will allow setting hints */
 
 func (b *Board) SetHint(row, col, num int) bool {
+	if !b.Playing() {
+		return false
+	}
+
 	if num < 1 || num > 9 {
 		return false
 	}
-	if (b.ValidMove(row, col, num)) {
+	if (ValidMoveBoard(row, col, num, b.PlayerBoard)) {
 		b.Hints[col][row][num-1] = true
 		return true
 	}
@@ -19,6 +21,10 @@ func (b *Board) SetHint(row, col, num int) bool {
 /* Will allow removing hints */
 
 func (b *Board) RemoveHint(row, col, num int) {
+	if !b.Playing() {
+		return
+	}
+
 	if num < 1 || num > 9 {
 		return
 	}
@@ -34,16 +40,15 @@ func (b *Board) HasHint(row, col, num int) bool {
 /* Will set a move on the player board, removing the needed hints when doing so if the move is valid */
 
 func (b *Board) SetMove(row, col, num int) bool {
-	fmt.Println("SetMove", row, col, num)
-	fmt.Println("Result is", b.Board[col][row])
+	if !b.Playing() {
+		return false
+	}
+
 	if (b.Board[col][row] == num) {
-		fmt.Println("RIGHT")
 		b.PlayerBoard[col][row] = num
 		b.RemoveHints(row, col, num)
 		return true
 	}
-	fmt.Println("Board", b.Board);
-	fmt.Println("WRONG")
 
 	b.Mistakes++
 	return false
@@ -69,7 +74,7 @@ func (b *Board) RemoveHints(row, col, num int) {
 func (b *Board) BoardDone() bool {
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
-			if b.PlayerBoard[i][j] == b.Board[i][j] {
+			if b.PlayerBoard[i][j] != b.Board[i][j] {
 				return false
 			}
 		}

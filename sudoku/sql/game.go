@@ -4,6 +4,26 @@ import (
 	"github.com/chrisbrine/go-sudoku/sudoku/board"
 )
 
+func (db *DBData) GetLeaderboard() ([]DBPlayer, error) {
+	rows, err := db.db.Query("SELECT * FROM players ORDER BY points DESC LIMIT 10")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	players := []DBPlayer{}
+	for rows.Next() {
+		var player DBPlayer
+		err = rows.Scan(&player.Id, &player.Username, &player.Name, &player.Password, &player.PerfectWins, &player.Wins, &player.Losses, &player.Points, &player.Difficulty, &player.Token)
+		if err != nil {
+			return nil, err
+		}
+		players = append(players, player)
+	}
+
+	return players, nil
+}
+
 func (db *DBData) CreateGameTable() error {
 	_, err := db.db.Exec("CREATE TABLE IF NOT EXISTS games (player_id INT NOT NULL UNIQUE, data TEXT NOT NULL UNIQUE)")
 	if err != nil {

@@ -72,7 +72,7 @@ func (b *Board) Playing() bool {
 		return false
 	}
 
-	if b.Mistakes > 20 {
+	if b.Mistakes >= 20 {
 		return false
 	}
 
@@ -81,4 +81,12 @@ func (b *Board) Playing() bool {
 	}
 
 	return true
+}
+
+func (b *Board) Win() bool {
+	return b.BoardDone() && b.Mistakes < 20
+}
+
+func (b *Board) Lose() bool {
+	return b.Mistakes >= 20
 }

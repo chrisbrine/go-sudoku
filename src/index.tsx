@@ -5,13 +5,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import { getGame } from "./redux/actions/game";
+import { getGame, updateLeaderboard } from "./redux/actions/game";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
 store.dispatch(getGame());
+store.dispatch(updateLeaderboard());
 
 root.render(
   <React.StrictMode>

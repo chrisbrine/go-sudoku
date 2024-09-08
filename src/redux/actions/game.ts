@@ -98,3 +98,10 @@ export const updateDifficulty = createAsyncThunk(
     return API.updateDifficulty(difficulty);
   }
 );
+
+export const updateLeaderboard = createAsyncThunk(
+  "game/updateLeaderboard",
+  async () => {
+    return API.leaderboard();
+  }
+);

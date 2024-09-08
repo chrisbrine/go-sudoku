@@ -15,7 +15,12 @@ func (p *Player) FinishBoard() {
 		}
 		points := (100 - (mistakes * 5)) * p.Difficulty
 		p.AddPoints(points)
-	} else {
+	} else if p.Board.GetMistakes() > 20 {
+		points := -25
+		if p.Points - points < 0 {
+			points = -p.Points
+		}
+		p.AddPoints(points)
 		p.AddLoss()
 	}
 	p.Board = nil

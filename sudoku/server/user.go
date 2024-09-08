@@ -99,7 +99,7 @@ func UserUpdateName(db *sql.DBData, w http.ResponseWriter, r *http.Request, para
 
 func UserUpdateDifficulty(db *sql.DBData, w http.ResponseWriter, r *http.Request, params map[string]string) {
 	token := GetToken(r)
-	newDifficulty := GetOneFromBody(r, "difficulty")
+	newDifficulty := params["difficulty"]
 
 	intDifficulty, err := strconv.Atoi(newDifficulty)
 	if err != nil {
@@ -124,5 +124,5 @@ func AddUserMethods(db *sql.DBData) {
 	HandlePOST(db, "/api/update/username", UserUpdateUsername, true)
 	HandlePOST(db, "/api/update/password", UserUpdatePassword, true)
 	HandlePOST(db, "/api/update/name", UserUpdateName, true)
-	HandlePOST(db, "/api/update/difficulty", UserUpdateDifficulty, true)
+	HandleGET(db, "/api/update/difficulty/{difficulty}", UserUpdateDifficulty, true)
 }

@@ -3,7 +3,6 @@
 package board
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -29,10 +28,9 @@ func (b *Board) removeNumbers(numberToRemove int) {
 }
 
 func (b *Board) SetupBoard(difficulty int) {
-	// This runs after the board is created. Go through the board and, based on the difficulty level, set the necessary
-	// numbers in playerBoard to 0 and the rest to the number in board
 
-	numberDifficulties := []int{30, 30, 40, 50}
+	numberDifficulties := []int{30, 30, 45, 60}
+	// numberDifficulties := []int{1, 1, 45, 60}
 	useDifficulty := numberDifficulties[0]
 
 	// Set the player board to the board
@@ -43,8 +41,6 @@ func (b *Board) SetupBoard(difficulty int) {
 	}
 
 	// Set the numbers in the player board to 0 based on the difficulty level
-
-	// check if difficulty is less than 0 or greater than the length, if so set it to 0
 	if difficulty > 0 && difficulty < len(numberDifficulties) {
 		useDifficulty = numberDifficulties[difficulty]
 	}
@@ -150,7 +146,6 @@ func (b *Board) InitBoard() {
 		{9,7,8,  3,1,2,  6,4,5},
 	};
 	b.Board = b.ShuffleAll(startingBoard)
-	fmt.Println("Board", b.Board)
 }
 
 func (b *Board) EmptyHints() {

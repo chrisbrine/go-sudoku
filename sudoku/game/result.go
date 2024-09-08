@@ -20,7 +20,7 @@ takes commands with DB to get player and board data along with any commands such
 These will ALWAYS return a json data of the current player and board data and it will always be the same data
 */
 
-func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, success bool) GameResult {
+func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, success bool, lastMove LastMoveType) GameResult {
 	gameBoard := playerData.GetGame()
 
 	var playerBoard [9][9]int
@@ -29,6 +29,7 @@ func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, succe
 	var numbersLeft [9]int
 	var playing bool
 	var inGame bool
+	gameStatus := 0
 
 	if gameBoard != nil {
 		playerBoard = gameBoard.PlayerBoard
@@ -37,6 +38,13 @@ func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, succe
 		numbersLeft = gameBoard.NumbersLeft()
 		playing = gameBoard.Playing()
 		inGame = true
+		if !gameBoard.Playing() {
+			if (gameBoard.Win()) {
+				gameStatus = 1
+			} else {
+				gameStatus = -1
+			}
+		}
 	} else {
 		playerBoard = [9][9]int{}
 		hints = [9][9][9]bool{}
@@ -57,6 +65,8 @@ func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, succe
 		Points: playerData.GetPoints(),
 		Wins: playerData.GetWins(),
 		Losses: playerData.GetLosses(),
+		GameStatus: gameStatus,
+		LastMove: lastMove,
 		PerfectWins: playerData.GetPerfectWins(),
 		Difficulty: playerData.GetDifficulty(),
 		Username: DBplayer.GetUsername(),
@@ -77,8 +87,8 @@ func ResultToJson(result *GameResult) (string, error) {
 	return string(jsonData), nil
 }
 
-func HandleResult(playerData *player.Player, DBplayer *sql.DBPlayer, success bool) (string, error) {
-	result := PlayerDataToResult(playerData, DBplayer, success)
+func HandleResultLastMove(playerData *player.Player, DBplayer *sql.DBPlayer, success bool, lastMove LastMoveType) (string, error) {
+	result := PlayerDataToResult(playerData, DBplayer, success, lastMove)
 
 	jsonData, err := ResultToJson(&result)
 	if err != nil {
@@ -86,6 +96,10 @@ func HandleResult(playerData *player.Player, DBplayer *sql.DBPlayer, success boo
 	}
 
 	return jsonData, nil
+}
+
+func HandleResult(playerData *player.Player, DBplayer *sql.DBPlayer, success bool) (string, error) {
+	return HandleResultLastMove(playerData, DBplayer, success, LastMoveType{})
 }
 
 func GetBoard(db *sql.DBData, player player.Player) (*board.Board, error) {

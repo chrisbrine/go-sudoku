@@ -16,6 +16,7 @@ import {
   updatePassword,
   updateName,
   updateDifficulty,
+  updateLeaderboard,
 } from "../actions/game";
 import { IGameStateData } from "../types";
 
@@ -29,6 +30,7 @@ export const gameSlice = createSlice({
     pickHint: false,
     page: EPage.LOGIN,
     loggedIn: false,
+    leaderboard: [],
   } as IGameStateData,
   reducers: {
     setPickHint: gameActions.setPickHint,
@@ -214,6 +216,18 @@ export const gameSlice = createSlice({
         state.game = action.payload;
       })
       .addCase(updateDifficulty.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+        console.error(action.error);
+      })
+      .addCase(updateLeaderboard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateLeaderboard.fulfilled, (state, action) => {
+        state.loading = false;
+        state.leaderboard = action.payload;
+      })
+      .addCase(updateLeaderboard.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
         console.error(action.error);

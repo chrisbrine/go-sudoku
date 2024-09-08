@@ -1,6 +1,6 @@
 import type { Action, SerializedError, ThunkAction } from "@reduxjs/toolkit";
 import { store } from "./store";
-import { EPage, GameData } from "../types";
+import { EPage, GameData, ILeaderboard } from "../types";
 
 export type AppStore = typeof store;
 export type RootState = ReturnType<typeof store.getState>;
@@ -20,4 +20,5 @@ export type IGameStateData = {
   pickHint: boolean;
   page: EPage;
   loggedIn: boolean;
+  leaderboard: ILeaderboard;
 };

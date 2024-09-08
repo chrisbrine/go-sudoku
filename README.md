@@ -2,15 +2,12 @@
 
 This system includes a server component in Golang and a frontend in React. It will generate its own sudoku puzzles and has some basic play through. Still plenty to add in:
 
-1. Allow hinting
-2. Adjust difficulty levels (between too easy and too hard)
-3. Allow game completion during the game
-4. Allow set difficulty (move difficult to parameter and GET)
-5. Allow password changes
-6. Allow username and name changes
-7. Add a leaderboard
-8. Finish documentation
-9. Add docker
+1. Allow password changes
+2. Allow username and name changes
+3. Finish documentation
+4. Add docker
+
+Updates to the user isn't working yet, but should be an easy enough fix. The rest other than above is working fine.
 
 # Run the program
 

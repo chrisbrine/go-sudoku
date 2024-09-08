@@ -1,0 +1,131 @@
+.user-dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.user-dashboard .tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.user-dashboard .tabs button {
+  background-color: #fff;
+  color: #00b;
+  border: 2px solid #00b;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+
+.user-dashboard .tabs button:hover:not(.selected) {
+  background-color: #00b;
+  border-color: #fff;
+  color: #ccc;
+}
+
+.user-dashboard .tabs button:active:not(.selected) {
+  background-color: #00f;
+  border-color: #fff;
+  color: #fff;
+}
+
+.user-dashboard .tabs button.selected {
+  background-color: #00b;
+  border-color: #fff;
+  color: #fff;
+}
+
+.user-dashboard button.back-button {
+  background-color: #fff;
+  color: #b00;
+  border: 2px solid #b00;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+
+.user-dashboard button.back-button:hover {
+  background-color: #b00;
+  border-color: #fff;
+  color: #ccc;
+}
+
+.user-dashboard button.back-button:active {
+  background-color: #f00;
+  border-color: #fff;
+  color: #fff;
+}
+
+.user-dashboard .profile,
+.user-dashboard .password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.user-dashboard .profile .fields,
+.user-dashboard .password .fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.user-dashboard .profile .fields label,
+.user-dashboard .password .fields label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.user-dashboard .profile .fields input,
+.user-dashboard .password .fields input {
+  width: 300px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 1.5rem;
+}
+
+.user-dashboard .profile .fields button,
+.user-dashboard .password .fields button {
+  background-color: #fff;
+  color: #00b;
+  border: 2px solid #00b;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+
+.user-dashboard .profile .fields button:hover,
+.user-dashboard .password .fields button:hover {
+  background-color: #00b;
+  border-color: #fff;
+  color: #ccc;
+}
+
+.user-dashboard .profile .fields button:active,
+.user-dashboard .password .fields button:active {
+  background-color: #00f;
+  border-color: #fff;
+  color: #fff;
+}

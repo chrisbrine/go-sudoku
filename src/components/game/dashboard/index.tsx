@@ -1,4 +1,4 @@
-import { newGame, updateDifficulty } from "../../../redux/actions";
+import { updateDifficulty } from "../../../redux/actions";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
   getDifficulty,
@@ -7,11 +7,11 @@ import {
   getPoints,
   getWins,
 } from "../../../redux/selectors/game";
+import Leaderboard from "./leaderboard";
 import "./dashboard.css";
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
-  const onNewGame = () => dispatch(newGame());
   const onDifficultyChange = (difficulty: number) =>
     dispatch(updateDifficulty(difficulty));
 
@@ -21,8 +21,7 @@ export default function Dashboard() {
   const points = useAppSelector(getPoints);
   const difficulty = useAppSelector(getDifficulty);
   const difficultyOptions = ["Easy", "Medium", "Hard"];
-  // can start a new game with a button click
-  // but show the wins, losses, points, and perfect wins
+
   return (
     <div className="no-board">
       <div className="stats">
@@ -63,9 +62,7 @@ export default function Dashboard() {
         </div>
       </div>
       <hr />
-      <button className="new-game" onClick={onNewGame}>
-        New Game
-      </button>
+      <Leaderboard />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 package game
 
 import (
-	"github.com/chrisbrine/go-sudoku/sudoku/board"
+	"fmt"
+
 	"github.com/chrisbrine/go-sudoku/sudoku/player"
 	"github.com/chrisbrine/go-sudoku/sudoku/sql"
 )
@@ -18,29 +19,6 @@ func GetData(db *sql.DBData, token string) (sql.DBPlayer, player.Player, error) 
 	return playerData, player, nil
 }
 
-func CheckEndGame(db *sql.DBData, playerInfo *player.Player, board *board.Board) (bool, error) {
-		// check if the game is over
-	if board.BoardDone() {
-		playerInfo.FinishBoard()
-
-		// write playerInfo to database
-		dbErr := db.UpdatePlayer(playerInfo)
-		if dbErr != nil {
-			return false, dbErr
-		}
-
-		// delete board from database
-		dbErr = db.DeleteGame(playerInfo.Id)
-		if dbErr != nil {
-			return false, dbErr
-		}
-
-		return true, nil
-	}
-
-	return false, nil
-}
-
 func ChangeDifficulty(db *sql.DBData, token string, difficulty int) (string, error) {
 	// get player data
 	playerData, playerInfo, playerErr := GetData(db, token)
@@ -49,13 +27,9 @@ func ChangeDifficulty(db *sql.DBData, token string, difficulty int) (string, err
 	}
 
 	// change difficulty
+	playerData.Difficulty = difficulty
+	playerInfo.Difficulty = difficulty
 	db.UpdateDifficulty(&playerData, difficulty)
-
-	// write playerInfo to database
-	dbErr := db.UpdatePlayer(&playerInfo)
-	if dbErr != nil {
-		return "", dbErr
-	}
 
 	// return the result as json
 	return HandleResult(&playerInfo, &playerData, true)
@@ -104,14 +78,15 @@ func PickNumber(db *sql.DBData, token string, row int, col int, num int) (string
 		return "", dbErr
 	}
 
-	// check if the game is over
-	_, endGameErr := CheckEndGame(db, &playerInfo, playerInfo.Board)
-	if endGameErr != nil {
-		return "", endGameErr
+	lastMove := LastMoveType{
+		Row: row + 1,
+		Col: col + 1,
+		Num: num,
+		Type: "MOVE",
 	}
 
 	// return the result as json
-	return HandleResult(&playerInfo, &playerData,success)
+	return HandleResultLastMove(&playerInfo, &playerData, success, lastMove)
 }
 
 func PickHint(db *sql.DBData, token string, row int, col int, num int, remove bool) (string, error) {
@@ -144,14 +119,19 @@ func PickHint(db *sql.DBData, token string, row int, col int, num int, remove bo
 		return "", dbErr
 	}
 
-	// check if the game is over
-	_, endGameErr := CheckEndGame(db, &playerInfo, playerInfo.Board)
-	if endGameErr != nil {
-		return "", endGameErr
+	lastMove := LastMoveType{
+		Row: row + 1,
+		Col: col + 1,
+		Num: num,
+		Type: "HINT",
+	}
+
+	if remove {
+		lastMove.Type = "HINT_REMOVE"
 	}
 
 	// return the result as json
-	return HandleResult(&playerInfo, &playerData, success)
+	return HandleResultLastMove(&playerInfo, &playerData, success, lastMove)
 }
 
 func GetCurrent(db *sql.DBData, token string) (string, error) {
@@ -169,13 +149,26 @@ func QuitGame(db *sql.DBData, token string) (string, error) {
 	// get player data
 	playerData, playerInfo, playerErr := GetData(db, token)
 	if playerErr != nil {
+		fmt.Println("1. Error quitting game: ", playerErr)
 		return "", playerErr
 	}
 
 	// get board
 	board, boardErr := GetBoard(db, playerInfo)
 	if boardErr != nil {
+		fmt.Println("2. Error quitting game: ", boardErr)
 		return "", boardErr
+	}
+
+	playerInfo.FinishBoard()
+	playerData.Wins = playerInfo.Wins
+	playerData.Losses = playerInfo.Losses
+	playerData.PerfectWins = playerInfo.PerfectWins
+	playerData.Points = playerInfo.Points
+	dbPlayErr := db.UpdatePlayer(&playerInfo)
+	if dbPlayErr != nil {
+		fmt.Println("3. Error quitting game: ", dbPlayErr)
+		return "", dbPlayErr
 	}
 
 	board.QuitGame()
@@ -183,6 +176,7 @@ func QuitGame(db *sql.DBData, token string) (string, error) {
 	// delete board from database
 	dbErr := db.DeleteGame(playerInfo.Id)
 	if dbErr != nil {
+		fmt.Println("4. Error quitting game: ", dbErr)
 		return "", dbErr
 	}
 
