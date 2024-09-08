@@ -1,0 +1,27 @@
+.pick-type {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pick-type button {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  color: #495057;
+  font-size: 1rem;
+  padding: 5px 10px;
+  width: calc((9 * 53px) / 2);
+  cursor: pointer;
+}
+
+.pick-type button:hover {
+  background-color: #e9ecef;
+}
+
+.pick-type button.active {
+  background-color: #007bff;
+  color: white;
+  cursor: not-allowed;
+}

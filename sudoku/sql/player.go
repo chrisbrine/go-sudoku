@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/chrisbrine/go-sudoku/sudoku/player"
@@ -9,7 +10,7 @@ import (
 )
 
 func (d *DBData) CreatePlayerTable() error {
-	_, err := d.db.Exec("CREATE TABLE IF NOT EXISTS players (id TEXT PRIMARY KEY, username TEXT NOT NULL UNIQUE, name TEXT, password TEXT, perfectWins INTEGER, wins INTEGER, losses INTEGER, points INTEGER, difficulty INTEGER, token TEXT UNIQUE)")
+	_, err := d.db.Exec("CREATE TABLE IF NOT EXISTS players (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, name TEXT, password TEXT, perfectWins INTEGER, wins INTEGER, losses INTEGER, points INTEGER, difficulty INTEGER, token TEXT UNIQUE)")
 	if err != nil {
 		return err
 	}
@@ -19,22 +20,36 @@ func (d *DBData) CreatePlayerTable() error {
 
 func (d *DBData) GetPlayer(username string) (DBPlayer, error) {
 	var player DBPlayer
-	err := d.db.QueryRow("SELECT * FROM players WHERE username = ?", username).Scan(&player.id, &player.username, &player.name, &player.password, &player.perfectWins, &player.wins, &player.losses, &player.points, &player.difficulty)
+	err := d.db.QueryRow("SELECT * FROM players WHERE username = ?", username).Scan(
+		&player.Id,
+		&player.Username,
+		&player.Name,
+		&player.Password,
+		&player.PerfectWins,
+		&player.Wins,
+		&player.Losses,
+		&player.Points,
+		&player.Difficulty,
+		&player.Token,
+	)
 	if err != nil {
+		fmt.Println("Error getting player", username, ":", err)
 		return player, err
 	}
+
+	player.db = d
 
 	return player, nil
 }
 
 func (d *DBData) AddPlayer(player *DBPlayer) error {
-	newPassword, passErr := hashPassword(player.password)
+	newPassword, passErr := hashPassword(player.Password)
 	if passErr != nil {
 		return passErr
 	}
-	player.password = newPassword
+	player.Password = newPassword
 
-	_, dbErr := d.db.Exec("INSERT INTO players (id, username, name, password, perfectWins, wins, losses, points, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", player.id, player.username, player.name, player.password, player.perfectWins, player.wins, player.losses, player.points, player.difficulty)
+	_, dbErr := d.db.Exec("INSERT INTO players (username, name, password, perfectWins, wins, losses, points, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", player.Username, player.Name, player.Password, player.PerfectWins, player.Wins, player.Losses, player.Points, player.Difficulty)
 	if dbErr != nil {
 		return dbErr
 	}
@@ -48,15 +63,20 @@ func hashPassword(password string) (string, error) {
 }
 
 func (p *DBPlayer) GetPlayerData() player.Player {
+	game, gameErr := p.db.GetGame(p.Id)
+	if gameErr != nil {
+		game = nil
+	}
 	return player.Player{
-		Id:          p.id,
-		Username:    p.username,
-		Name:        p.name,
-		PerfectWins: p.perfectWins,
-		Wins:        p.wins,
-		Losses:      p.losses,
-		Points:      p.points,
-		Difficulty:  p.difficulty,
+		Id:          p.Id,
+		Username:    p.Username,
+		Name:        p.Name,
+		PerfectWins: p.PerfectWins,
+		Wins:        p.Wins,
+		Losses:      p.Losses,
+		Points:      p.Points,
+		Difficulty:  p.Difficulty,
+		Board:       game,
 	}
 }
 
@@ -66,15 +86,15 @@ func (p *DBPlayer) CheckPasswordHash(password, hash string) bool {
 }
 
 func (p *DBPlayer) GetUsername() string {
-	return p.username
+	return p.Username
 }
 
 func (p *DBPlayer) GetName() string {
-	return p.name
+	return p.Name
 }
 
 func (d *DBData) UpdatePlayer(player *player.Player) error {
-	_, err := d.db.Exec("UPDATE players SET perfectWins = ?, wins = ?, losses = ?, points = ?, difficulty = ? WHERE id = ?", player.GetPerfectWins(), player.GetWins(), player.GetLosses(), player.GetPoints(), player.GetDifficulty(), player.GetID())
+	_, err := d.db.Exec("UPDATE players SET perfectWins = ?, wins = ?, losses = ?, points = ?, difficulty = ? WHERE id = ?", player.GetPerfectWins(), player.GetWins(), player.GetLosses(), player.GetPoints(), player.GetDifficulty(), player.Id)
 	if err != nil {
 		return err
 	}
@@ -83,7 +103,7 @@ func (d *DBData) UpdatePlayer(player *player.Player) error {
 }
 
 func (d *DBData) DeletePlayer(player *DBPlayer) error {
-	_, err := d.db.Exec("DELETE FROM players WHERE id = ?", player.id)
+	_, err := d.db.Exec("DELETE FROM players WHERE id = ?", player.Id)
 	if err != nil {
 		return err
 	}
@@ -97,7 +117,7 @@ func (d *DBData) ChangePassword(player *DBPlayer, password string) error {
 		return passErr
 	}
 
-	_, dbErr := d.db.Exec("UPDATE players SET password = ? WHERE id = ?", newPassword, player.id)
+	_, dbErr := d.db.Exec("UPDATE players SET password = ? WHERE id = ?", newPassword, player.Id)
 	if dbErr != nil {
 		return dbErr
 	}
@@ -106,7 +126,7 @@ func (d *DBData) ChangePassword(player *DBPlayer, password string) error {
 }
 
 func (d *DBData) ChangeUsername(player *DBPlayer, username string) error {
-	_, err := d.db.Exec("UPDATE players SET username = ? WHERE id = ?", username, player.id)
+	_, err := d.db.Exec("UPDATE players SET username = ? WHERE id = ?", username, player.Id)
 	if err != nil {
 		return err
 	}
@@ -115,7 +135,16 @@ func (d *DBData) ChangeUsername(player *DBPlayer, username string) error {
 }
 
 func (d *DBData) ChangeName(player *DBPlayer, name string) error {
-	_, err := d.db.Exec("UPDATE players SET name = ? WHERE id = ?", name, player.id)
+	_, err := d.db.Exec("UPDATE players SET name = ? WHERE id = ?", name, player.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *DBData) UpdateDifficulty(player *DBPlayer, difficulty int) error {
+	_, err := d.db.Exec("UPDATE players SET difficulty = ? WHERE id = ?", difficulty, player.Id)
 	if err != nil {
 		return err
 	}
@@ -139,7 +168,7 @@ func (db *DBData) Login(username string, password string) (bool, error) {
 		return false, playerErr
 	}
 
-	if player.CheckPasswordHash(password, player.password) {
+	if player.CheckPasswordHash(password, player.Password) {
 		_, tokenErr := db.CreateToken(&player)
 		if tokenErr != nil {
 			return false, tokenErr
@@ -180,28 +209,45 @@ func (db *DBData) CreateToken(player *DBPlayer) (string, error) {
 		token = ""
 	}
 
-	_, dbErr := db.db.Exec("UPDATE players SET token = ? WHERE id = ?", token, player.id)
+	_, dbErr := db.db.Exec("UPDATE players SET token = ? WHERE username = ?", token, player.Username)
 	if dbErr != nil {
 		return "", dbErr
 	}
 
-	player.token = token
+	player.Token = token
 
 	return token, nil
 }
 
 func (db *DBData) GetPlayerFromToken(token string) (DBPlayer, error) {
 	var player DBPlayer
-	err := db.db.QueryRow("SELECT * FROM players WHERE token = ?", token).Scan(&player.id, &player.username, &player.name, &player.password, &player.perfectWins, &player.wins, &player.losses, &player.points, &player.difficulty)
+	err := db.db.QueryRow("SELECT * FROM players WHERE token = ?", token).Scan(&player.Id, &player.Username, &player.Name, &player.Password, &player.PerfectWins, &player.Wins, &player.Losses, &player.Points, &player.Difficulty, &player.Token)
 	if err != nil {
 		return player, err
 	}
 
+	player.db = db
+
 	return player, nil
 }
 
+func (db *DBData) ConfirmToken(token string, username string) (bool, error) {
+	var count int
+	sqlRow := db.db.QueryRow("SELECT COUNT(*) FROM players WHERE token = ? AND username = ?", token, username)
+	dbErr := sqlRow.Scan(&count)
+	if dbErr != nil {
+		return false, dbErr
+	}
+
+	if count == 1 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (db *DBData) DeleteToken(player *DBPlayer) error {
-	_, err := db.db.Exec("UPDATE players SET token = NULL WHERE id = ?", player.id)
+	_, err := db.db.Exec("UPDATE players SET token = ? WHERE id = ?", "", player.Id)
 	if err != nil {
 		return err
 	}
@@ -210,5 +256,5 @@ func (db *DBData) DeleteToken(player *DBPlayer) error {
 }
 
 func (db *DBData) GetToken(player *DBPlayer) string {
-	return player.token
+	return player.Token
 }

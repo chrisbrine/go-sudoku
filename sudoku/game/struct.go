@@ -2,11 +2,12 @@ package game
 
 type GameResult struct {
 	Board [9][9]int `json:"Board"`
-	PlayerBoard [9][9]int `json:"PlayerBoard"`
+	// PlayerBoard [9][9]int `json:"PlayerBoard"`
 	Hints [9][9][9]bool `json:"Hints"`
 	NumbersLeft [9]int `json:"NumbersLeft"`
 	Mistakes int `json:"Mistakes"`
 	Playing bool `json:"Playing"`
+	InGame bool `json:"InGame"`
 	Username string `json:"Username"`
 	Name string `json:"Name"`
 	Wins int `json:"Wins"`

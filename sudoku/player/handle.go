@@ -62,21 +62,22 @@ func (p *Player) SetupPlayer() {
 	p.Wins = 0
 	p.Losses = 0
 	p.Points = 0
+	p.PerfectWins = 0
 	p.SetDifficulty(1)
 }
 
-func (p *Player) SetID(id string) {
-	// if no string passed, generate id instead
-	if id == "" {
-		p.Id = GenerateID()
-	} else {
-		p.Id = id
-	}
-}
+// func (p *Player) SetID(id string) {
+// 	// if no string passed, generate id instead
+// 	if id == "" {
+// 		p.Id = GenerateID()
+// 	} else {
+// 		p.Id = id
+// 	}
+// }
 
-func (p *Player) GetID() string {
-	return p.Id
-}
+// func (p *Player) GetID() string {
+// 	return p.Id
+// }
 
 /* handle random ID generation, produce as UUID */
 

@@ -1,0 +1,78 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  background: #f9f9f9;
+}
+
+.login-page .login,
+.login-page .register {
+  width: 100%;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-page .login h1,
+.login-page .register h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-page .login label,
+.login-page .register label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.login-page .login input,
+.login-page .register input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-page .login button,
+.login-page .register button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 2px solid #007bff;
+  background: #007bff;
+  color: #fff;
+  font-size: 16px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.login-page .login button:hover,
+.login-page .register button:hover {
+  background: #0056b3;
+}
+
+.login-page .login button:disabled,
+.login-page .register button:disabled {
+  background: #f9f9f9;
+  border-color: #333;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.login-page .login button.switch-button,
+.login-page .register button.switch-button {
+  border-color: #aa0011;
+  background: #aa0011;
+  color: #fff;
+}
+
+.login-page .login button.switch-button:hover,
+.login-page .register button.switch-button:hover {
+  background: #8a0011;
+}

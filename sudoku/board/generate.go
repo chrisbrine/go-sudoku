@@ -3,8 +3,8 @@
 package board
 
 import (
+	"fmt"
 	"math/rand"
-	"time"
 )
 
 func (b *Board) removeNumbers(numberToRemove int) {
@@ -32,7 +32,7 @@ func (b *Board) SetupBoard(difficulty int) {
 	// This runs after the board is created. Go through the board and, based on the difficulty level, set the necessary
 	// numbers in playerBoard to 0 and the rest to the number in board
 
-	numberDifficulties := []int{40, 40, 50, 60}
+	numberDifficulties := []int{30, 30, 40, 50}
 	useDifficulty := numberDifficulties[0]
 
 	// Set the player board to the board
@@ -55,33 +55,102 @@ func (b *Board) SetupBoard(difficulty int) {
 
 // Generate a full finished board at random
 
-// randomValidNumber returns a random valid number for the cell at the given row and column
-func (b *Board) randomizeNumber(row, col int) int {
-	// Create a slice of all possible numbers
-	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+func (b *Board) Swap3X3Blocks(r1 int, r2 int, block [9][9]int) [9][9]int {
+	for i := 0; i < 3; i++ {
+		block = b.SwapRows(r1 * 3 + i, r2 * 3 + i, block)
+	}
+	return block
+}
 
-	// Shuffle the slice
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(numbers), func(i, j int) { numbers[i], numbers[j] = numbers[j], numbers[i] })
+func (b *Board) SwapCols(c1 int, c2 int, board[9][9]int) [9][9]int {
+	for i := 0; i < 9; i++ {
+		col := board[i][c1]
+		board[i][c1] = board[i][c2]
+		board[i][c2] = col
+	}
+	return board
+}
 
-	// Go through each number and check if it is valid
-	for _, number := range numbers {
-		if b.ValidMove(row, col, number) {
-			return number
+func (b *Board) SwapRows(r1 int, r2 int, board [9][9]int) [9][9] int {
+	row := board[r1]
+	board[r1] = board[r2]
+	board[r2] = row
+	return board
+}
+
+func (b *Board) SwapNumbers(n1 int, n2 int, board [9][9]int) [9][9]int {
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
+			if board[i][j] == n1 {
+				board[i][j] = n2
+			} else if board[i][j] == n2 {
+				board[i][j] = n1
+			}
 		}
 	}
+	return board
+}
 
-	// If no valid number was found, return 0
-	return 0
+func (b *Board) Shuffle3X3Blocks(board [9][9]int) [9][9]int {
+	for i := 0; i < 3; i++ {
+		ranNum := rand.Intn(3)
+		board = b.Swap3X3Blocks(i, ranNum, board)
+	}
+	return board
+}
+
+func (b *Board) ShuffleCols(board [9][9]int) [9][9]int {
+	var blockNumber int
+	for i := 0; i < 3; i++ {
+		ranNum := rand.Intn(3)
+		blockNumber = i / 3
+		board = b.SwapCols(i, blockNumber * 3 + ranNum, board)
+	}
+	return board
+}
+
+func (b *Board) ShuffleRows(board [9][9]int) [9][9]int {
+	var blockNumber int
+	for i := 0; i < 3; i++ {
+		ranNum := rand.Intn(3)
+		blockNumber = i / 3
+		board = b.SwapRows(i, blockNumber * 3 + ranNum, board)
+	}
+	return board
+}
+
+func (b *Board) ShuffleNumbers(board [9][9]int) [9][9]int {
+	for i := 1; i <= 9; i++ {
+		ranNum := rand.Intn(9) +1
+		board = b.SwapNumbers(i, ranNum, board)
+	}
+	return board
+}
+
+func (b *Board) ShuffleAll(board [9][9]int) [9][9]int {
+	board = b.ShuffleNumbers(board)
+	board = b.ShuffleRows(board)
+	board = b.ShuffleCols(board)
+	board = b.Shuffle3X3Blocks(board)
+	return board
 }
 
 func (b *Board) InitBoard() {
-	// Go through each cell in the board and fill it with a random valid number
-	for i := 0; i < 9; i++ {
-		for j := 0; j < 9; j++ {
-			b.Board[i][j] = b.randomizeNumber(i, j)
-		}
-	}
+	startingBoard := [9][9]int{
+		{1,2,3,  4,5,6,  7,8,9},
+		{4,5,6,  7,8,9,  1,2,3},
+		{7,8,9,  1,2,3,  4,5,6},
+
+		{2,3,1,  5,6,4,  8,9,7},
+		{5,6,4,  8,9,7,  2,3,1},
+		{8,9,7,  2,3,1,  5,6,4},
+
+		{3,1,2,  6,4,5,  9,7,8},
+		{6,4,5,  9,7,8,  3,1,2},
+		{9,7,8,  3,1,2,  6,4,5},
+	};
+	b.Board = b.ShuffleAll(startingBoard)
+	fmt.Println("Board", b.Board)
 }
 
 func (b *Board) EmptyHints() {

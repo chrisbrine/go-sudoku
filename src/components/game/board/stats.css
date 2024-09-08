@@ -1,0 +1,33 @@
+.board-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+}
+
+.board-stats .numbers-left-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.board-stats .numbers-left-container .numbers-left {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.board-stats .numbers-left-container .numbers-left .number {
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  border: 2px solid #000;
+  font-size: 1.5rem;
+  margin: 2px 4px;
+  display: inline-block;
+}
+
+.board-stats .numbers-left-container .numbers-left .number.unavailable {
+  color: #ccc;
+  border-color: #ccc;
+}

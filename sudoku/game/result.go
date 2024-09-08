@@ -23,13 +23,37 @@ These will ALWAYS return a json data of the current player and board data and it
 func PlayerDataToResult(playerData *player.Player, DBplayer *sql.DBPlayer, success bool) GameResult {
 	gameBoard := playerData.GetGame()
 
+	var playerBoard [9][9]int
+	var hints [9][9][9]bool
+	var mistakes int
+	var numbersLeft [9]int
+	var playing bool
+	var inGame bool
+
+	if gameBoard != nil {
+		playerBoard = gameBoard.PlayerBoard
+		hints = gameBoard.Hints
+		mistakes = gameBoard.Mistakes
+		numbersLeft = gameBoard.NumbersLeft()
+		playing = gameBoard.Playing()
+		inGame = true
+	} else {
+		playerBoard = [9][9]int{}
+		hints = [9][9][9]bool{}
+		mistakes = 0
+		numbersLeft = [9]int{}
+		playing = false
+		inGame = false
+	}
+
 	result := &GameResult{
-		Board: gameBoard.Board,
-		PlayerBoard: gameBoard.PlayerBoard,
-		Hints: gameBoard.Hints,
-		Mistakes: gameBoard.Mistakes,
-		NumbersLeft: gameBoard.NumbersLeft(),
-		Playing: gameBoard.Playing(),
+		Board: playerBoard,
+		// PlayerBoard: gameBoard.PlayerBoard,
+		Hints: hints,
+		Mistakes: mistakes,
+		NumbersLeft: numbersLeft,
+		Playing: playing,
+		InGame: inGame,
 		Points: playerData.GetPoints(),
 		Wins: playerData.GetWins(),
 		Losses: playerData.GetLosses(),

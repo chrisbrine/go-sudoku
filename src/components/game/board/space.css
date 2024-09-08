@@ -1,0 +1,127 @@
+.space {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  border: 1px dashed #999;
+  cursor: pointer;
+}
+
+.space.correct {
+  background-color: #fff;
+  cursor: default;
+}
+
+.space .number {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.space .number.number-1,
+.space .hints .hint.active.hint-1 {
+  color: red;
+}
+.space .number.number-2,
+.space .hints .hint.active.hint-2 {
+  color: blue;
+}
+.space .number.number-3,
+.space .hints .hint.active.hint-3 {
+  color: green;
+}
+.space .number.number-4,
+.space .hints .hint.active.hint-4 {
+  color: purple;
+}
+.space .number.number-5,
+.space .hints .hint.active.hint-5 {
+  color: orange;
+}
+.space .number.number-6,
+.space .hints .hint.active.hint-6 {
+  color: #e75480;
+}
+.space .number.number-7,
+.space .hints .hint.active.hint-7 {
+  color: brown;
+}
+.space .number.number-8,
+.space .hints .hint.active.hint-8 {
+  color: #8b8000;
+}
+.space .number.number-9,
+.space .hints .hint.active.hint-9 {
+  color: darkslategray;
+}
+
+/* get the .space that has a child with the class .number.completed-number. but select the parent */
+
+/* .space:first-child(.number.completed-number) {
+  color: #007bff; 
+  background-color: #aaa;
+} */
+
+.space:has(> .number.completed-number) {
+  background-color: #ddd;
+}
+
+.space .number.completed-number {
+  color: #000;
+}
+
+.space .hints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.space .hints .hint {
+  font-size: 0.75rem;
+  margin: 2px 4px;
+  visibility: hidden;
+}
+
+.space .hints .hint.active {
+  visibility: visible;
+}
+
+.space .hints:hover > .hint.inactive {
+  visibility: visible;
+}
+
+.space .hints .hint.inactive {
+  color: #555;
+}
+
+.space .hints .hint.inactive:hover {
+  font-weight: bold;
+  color: black;
+}
+
+/* space border fixes */
+
+.space:nth-child(3n) {
+  border-right: 2px solid black;
+}
+
+.space:nth-child(3n + 1) {
+  border-left: 0px;
+}
+
+.space:nth-child(3n - 2) {
+  border-left: 0px;
+}
+
+.space:nth-child(9) {
+  border-right: 0px;
+}
+
+.board .row:nth-child(3n) .space {
+  border-bottom: 0px;
+}
+
+.board .row:nth-child(3n - 2) .space {
+  border-top: 0px;
+}

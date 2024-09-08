@@ -1,9 +1,11 @@
 package sql
 
-import "github.com/chrisbrine/go-sudoku/sudoku/board"
+import (
+	"github.com/chrisbrine/go-sudoku/sudoku/board"
+)
 
 func (db *DBData) CreateGameTable() error {
-	_, err := db.db.Exec("CREATE TABLE IF NOT EXISTS games (player_id TEXT NOT NULL UNIQUE, data TEXT NOT NULL UNIQUE)")
+	_, err := db.db.Exec("CREATE TABLE IF NOT EXISTS games (player_id INT NOT NULL UNIQUE, data TEXT NOT NULL UNIQUE)")
 	if err != nil {
 		return err
 	}
@@ -11,14 +13,14 @@ func (db *DBData) CreateGameTable() error {
 	return nil
 }
 
-func (db *DBData) AddGame(playerID string, b *board.Board) error {
+func (db *DBData) AddGame(playerID int, b *board.Board) error {
 	// get a json string of the board
 	data, boardErr := b.ToJson()
 	if boardErr != nil {
 		return boardErr
 	}
 
-	_, dbErr := db.db.Exec("INSERT INTO games (player_id, data) VALUES ($1, $2)", playerID, data)
+	_, dbErr := db.db.Exec("REPLACE INTO games (player_id, data) VALUES ($1, $2)", playerID, data)
 	if dbErr != nil {
 		return dbErr
 	}
@@ -26,7 +28,7 @@ func (db *DBData) AddGame(playerID string, b *board.Board) error {
 	return nil
 }
 
-func (db *DBData) DeleteGame(playerID string) error {
+func (db *DBData) DeleteGame(playerID int) error {
 	_, dbErr := db.db.Exec("DELETE FROM games WHERE player_id = $1", playerID)
 	if dbErr != nil {
 		return dbErr
@@ -35,7 +37,7 @@ func (db *DBData) DeleteGame(playerID string) error {
 	return nil
 }
 
-func (db *DBData) GetGame(playerID string) (*board.Board, error) {
+func (db *DBData) GetGame(playerID int) (*board.Board, error) {
 	var data string
 	dbErr := db.db.QueryRow("SELECT data FROM games WHERE player_id = $1", playerID).Scan(&data)
 	if dbErr != nil {

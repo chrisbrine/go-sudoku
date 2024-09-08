@@ -1,0 +1,31 @@
+/* connect all in the grid as a sudoku grid */
+.board {
+  /* display: grid; */
+  /* grid-template-columns: repeat(1, 1fr); */
+  /* grid-gap: 0px; */
+  margin-top: 20px;
+  /* display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-gap: 0px;
+  margin-top: 20px; */
+}
+
+.board .row {
+  width: calc(52px * 9);
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  grid-template-columns: repeat(9, 1fr);
+  display: grid;
+}
+
+.board .row:first-child {
+  border-top: 2px solid black;
+}
+
+.board .row:last-child {
+  border-bottom: 2px solid black;
+}
+
+.board .row:nth-child(3n) {
+  border-bottom: 2px solid black;
+}

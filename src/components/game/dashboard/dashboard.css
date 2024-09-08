@@ -1,0 +1,90 @@
+.no-board {
+  padding: 10px;
+}
+
+.no-board .stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+}
+
+.no-board .stats .label {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.no-board .stats .value {
+  font-size: 1.5rem;
+}
+
+.no-board .difficulty h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.no-board .difficulty .difficulty-select {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.no-board .difficulty .difficulty-select button.difficulty-button {
+  width: 150px;
+  background-color: #fff;
+  color: #00b;
+  border: 2px solid #00b;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+
+.no-board
+  .difficulty
+  .difficulty-select
+  button.difficulty-button:hover:not(.selected) {
+  background-color: #00b;
+  border-color: #fff;
+  color: #ccc;
+}
+
+.no-board
+  .difficulty
+  .difficulty-select
+  button.difficulty-button:active:not(.selected) {
+  background-color: #00f;
+  border-color: #fff;
+  color: #fff;
+}
+
+.no-board .difficulty .difficulty-select button.selected {
+  background-color: white;
+  border-color: #a00;
+  color: #a00;
+  cursor: not-allowed;
+}
+
+.no-board button.new-game {
+  background-color: #333;
+  color: white;
+  border: 2px solid #000;
+  margin: 15px 0;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.6s ease;
+}
+
+.no-board button.new-game:hover {
+  background-color: #666;
+  color: #ccc;
+}
+
+.no-board button.new-game:active {
+  background-color: #777;
+  color: white;
+}

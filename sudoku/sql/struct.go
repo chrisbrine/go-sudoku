@@ -14,14 +14,15 @@ type DBData struct {
 // }
 
 type DBPlayer struct {
-	id string
-	username string
-	name string
-	password string
-	perfectWins int
-	wins int
-	losses int
-	points int
-	difficulty int
-	token string
+	db *DBData
+	Id int
+	Username string
+	Name string
+	Password string
+	PerfectWins int
+	Wins int
+	Losses int
+	Points int
+	Difficulty int
+	Token string
 }
